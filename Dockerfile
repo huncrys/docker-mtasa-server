@@ -1,7 +1,7 @@
 ARG MTA_SERVER_VERSION=1.6.0
 ARG MTA_SERVER_BUILD_NUMBER=22731
 
-FROM alpine:latest as helper
+FROM alpine:3.20 as helper
 
 ARG MTA_SERVER_VERSION
 ARG MTA_SERVER_BUILD_NUMBER
@@ -16,7 +16,8 @@ RUN wget https://nightly.mtasa.com/multitheftauto_linux_x64-${MTA_SERVER_VERSION
     && mkdir mtasa/.default \
     && mkdir mtasa/x64/modules \
     && tar -xzvf /tmp/baseconfig.tar.gz -C mtasa/.default \
-    && chmod go+rw mtasa -R
+    && chmod go+rw mtasa -R \
+    && rm -rf /tmp/*
 
 # Main image
 
