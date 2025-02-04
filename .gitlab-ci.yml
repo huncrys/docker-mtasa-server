@@ -1,0 +1,7 @@
+variables:
+  CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
+
+include:
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
+    inputs:
+      licenses: GPL-3.0+
