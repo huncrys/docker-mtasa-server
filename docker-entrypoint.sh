@@ -80,7 +80,7 @@ echo "**** changing permissions ****"
 
 echo "**** linking files ****"
 printf "'/config/' -> '/app/mods/deathmatch/*'\n"
-find /config -mindepth 1 -maxdepth 1 ! -name "*.sample" -print0 | xargs -0 -L 1 basename | xargs -I{} ln -sfT "/config/{}" "/app/mods/deathmatch/{}"
+find /config -mindepth 1 -maxdepth 1 ! -name "*.sample" -print0 | xargs -0 -L 1 basename | xargs -I{} ln -vsfT "/config/{}" "/app/mods/deathmatch/{}"
 ln -vsfT /cache /app/mods/deathmatch/resource-cache
 ln -vsfT /resources /app/mods/deathmatch/resources
 
