@@ -5,3 +5,8 @@ include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
     inputs:
       licenses: GPL-3.0+
+      architectures:
+        - amd64
+        - "386"
+        - arm64
+        - arm/v7
