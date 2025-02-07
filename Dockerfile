@@ -1,4 +1,4 @@
-ARG MTA_VERSION=1.6.0-rc-22934
+ARG MTA_VERSION=1.6.0-rc-22946
 
 FROM alpine:3.21 AS builder
 
