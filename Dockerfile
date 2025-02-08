@@ -10,6 +10,7 @@ RUN apk add --no-cache --update \
         tar \
         gzip \
         unzip \
+        wget \
     && if [[ "$TARGETARCH" == "amd64" ]]; then \
         TARSUFFIX="_x64"; \
         BINSUFFIX="64"; \
