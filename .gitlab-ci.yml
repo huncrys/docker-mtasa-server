@@ -4,9 +4,20 @@ variables:
 include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
     inputs:
+      tag: latest
       licenses: GPL-3.0+
       architectures:
         - amd64
         - "386"
         - arm64
         - arm/v7
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
+    inputs:
+      tag: luajit
+      licenses: GPL-3.0+
+      architectures:
+        - amd64
+        - "386"
+        - arm64
+        - arm/v7
+      executor-arguments: "--build-arg IS_LUAJIT=true"

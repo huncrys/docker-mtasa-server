@@ -1,8 +1,11 @@
-ARG MTA_VERSION=1.6.0-rc-22946
+ARG MTA_VERSION=1.6.0
+ARG MTA_REVISION=22946
 
-FROM alpine:3.21 AS builder
+FROM --platform=$BUILDPLATFORM alpine:3.21 AS builder
 
 ARG MTA_VERSION
+ARG MTA_REVISION
+ARG IS_LUAJIT
 ARG TARGETARCH
 ARG TARGETVARIANT
 
@@ -11,6 +14,7 @@ RUN apk add --no-cache --update \
         gzip \
         unzip \
         wget \
+        jq \
     && if [[ "$TARGETARCH" == "amd64" ]]; then \
         TARSUFFIX="_x64"; \
         BINSUFFIX="64"; \
@@ -27,14 +31,21 @@ RUN apk add --no-cache --update \
         echo "Unsupported target: ${TARGETARCH}${TARGETVARIANT:+/$TARGETVARIANT}" ; \
         exit 1; \
     fi \
+    && TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-rc-${MTA_REVISION}.tar.gz" \
+    && if [[ -n "$IS_LUAJIT" ]]; then \
+        package_version=$(wget -qO- "https://oaklab.hu/api/v4/projects/crys%2Fmtasa-blue/packages" | jq -r '[. |= sort_by(.version) | reverse | .[] | select(.version | contains(env.MTA_VERSION + "-r" + env.MTA_REVISION))][0].version'); \
+        BASE_URL="https://oaklab.hu/api/v4/projects/crys%2Fmtasa-blue/packages/generic/mtasa-blue/${package_version}/"; \
+    else \
+        BASE_URL="https://nightly.multitheftauto.com"; \
+    fi \
     && wget -P /tmp \
-        "https://nightly.multitheftauto.com/multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}.tar.gz" \
+        "${BASE_URL}/${TARNAME}" \
         "https://linux.multitheftauto.com/dl/baseconfig.tar.gz" \
     && mkdir -p /rootfs/app/mods/deathmatch \
                 /rootfs/defaults/config \
                 /rootfs/usr/local/bin \
     && find /rootfs/app/mods/deathmatch -type f -exec mv "{}" "{}.sample" \; \
-    && tar -xzf "/tmp/multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}.tar.gz" -C /rootfs/app --strip-components 1 \
+    && tar -xzf "/tmp/${TARNAME}" -C /rootfs/app --strip-components 1 \
     && tar -xzf /tmp/baseconfig.tar.gz -C /rootfs/defaults/config --strip-components 1 \
     && ln -sfT "/app/mta-server${BINSUFFIX}" /rootfs/usr/local/bin/mta-server \
     && rm -rf /tmp/* \
