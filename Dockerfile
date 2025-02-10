@@ -38,15 +38,15 @@ RUN apk add --no-cache --update \
     else \
         BASE_URL="https://nightly.multitheftauto.com"; \
     fi \
-    && wget -P /tmp \
+    && wget -nv -P /tmp \
         "${BASE_URL}/${TARNAME}" \
         "https://linux.multitheftauto.com/dl/baseconfig.tar.gz" \
-    && mkdir -p /rootfs/app/mods/deathmatch \
-                /rootfs/defaults/config \
+    && mkdir -p /rootfs/config \
+                /rootfs/app/mods/deathmatch \
                 /rootfs/usr/local/bin \
-    && find /rootfs/app/mods/deathmatch -type f -exec mv "{}" "{}.sample" \; \
     && tar -xzf "/tmp/${TARNAME}" -C /rootfs/app --strip-components 1 \
-    && tar -xzf /tmp/baseconfig.tar.gz -C /rootfs/defaults/config --strip-components 1 \
+    && mv /rootfs/app/mods/deathmatch /rootfs/defaults \
+    && tar -xzf /tmp/baseconfig.tar.gz -C /rootfs/defaults --strip-components 1 \
     && ln -sfT "/app/mta-server${BINSUFFIX}" /rootfs/usr/local/bin/mta-server \
     && rm -rf /tmp/* \
     ;
@@ -60,6 +60,7 @@ ENV \
     PGID=1000 \
     PUID=1000 \
     TERM="xterm" \
+    TZ=Europe/Budapest \
     MTA_RESOURCES_URL="https://mirror.multitheftauto.com/mtasa/resources/mtasa-resources-latest.zip"
 
 RUN apt-get update \
@@ -69,6 +70,7 @@ RUN apt-get update \
         gosu \
         libncursesw6 \
         locales \
+        tzdata \
         unzip \
         wget \
     && locale-gen en_US.UTF-8 \
@@ -88,6 +90,9 @@ RUN apt-get update \
 
 COPY --from=builder --chown=mta:mta /rootfs/ /
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+
+VOLUME /config \
+       /modules
 
 WORKDIR /app
 

@@ -3,17 +3,22 @@
 set -e
 
 mkdir -p \
-    /cache \
-    /config \
-    /modules \
-    /resources
+    /config/resources \
+    /modules
+
+echo "**** linking config ****"
+ln -vsfT /config /app/mods/deathmatch
 
 (
-    echo "**** checking configs ****"
-    cd /defaults/config
+    echo "**** checking defaults ****"
+    cd /defaults
     
     for file in *; do
-        [[ -f "/config/$file" ]] || cp -v "$file" "/config/$file"
+        if [ "${file: -3}" == ".so" ]; then
+            ln -vsfT "/defaults/$file" "/config/$file"
+        elif [ ! -f "/config/$file" ]; then
+            cp -v "$file" "/config/$file"
+        fi
     done
 )
 
@@ -51,11 +56,11 @@ mkdir -p \
     done
 )
 
-if [[ -n "$(find /resources -maxdepth 0 -empty)" ]]; then
+if [[ -n "$(find /config/resources -maxdepth 0 -empty)" ]]; then
     echo "**** downloading resources ****"
     wget -nv -O /tmp/resources.zip "${MTA_RESOURCES_URL}"
-    echo -n "unpacking to /resources... "
-    unzip -q /tmp/resources.zip -d /resources
+    echo -n "unpacking to /config/resources... "
+    unzip -q /tmp/resources.zip -d /config/resources
     echo "done"
 fi
 
@@ -72,16 +77,7 @@ echo "**** changing permissions ****"
     set -x
     chown -R mta:mta \
         /app \
-        /cache \
-        /config \
-        /modules \
-        /resources
+        /config
 )
-
-echo "**** linking files ****"
-printf "'/config/' -> '/app/mods/deathmatch/*'\n"
-find /config -mindepth 1 -maxdepth 1 ! -name "*.sample" -print0 | xargs -0 -L 1 basename | xargs -I{} ln -vsfT "/config/{}" "/app/mods/deathmatch/{}"
-ln -vsfT /cache /app/mods/deathmatch/resource-cache
-ln -vsfT /resources /app/mods/deathmatch/resources
 
 exec gosu mta:mta "$@"
