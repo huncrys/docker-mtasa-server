@@ -2,22 +2,23 @@ variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
 include:
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7
     inputs:
       tag: latest
       licenses: GPL-3.0+
-      architectures:
-        - amd64
-        - "386"
-        - arm64
-        - arm/v7
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/docker-publish@~latest
+      platforms:
+        - linux/amd64
+        - linux/386
+        - linux/arm64
+        - linux/arm/v7
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7
     inputs:
       tag: luajit
       licenses: GPL-3.0+
-      architectures:
-        - amd64
-        - "386"
-        - arm64
-        - arm/v7
-      executor-arguments: "--build-arg IS_LUAJIT=true"
+      platforms:
+        - linux/amd64
+        - linux/386
+        - linux/arm64
+        - linux/arm/v7
+      args:
+        - IS_LUAJIT=true
