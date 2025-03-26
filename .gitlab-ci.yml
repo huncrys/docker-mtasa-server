@@ -2,7 +2,7 @@ variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
 include:
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7.0.3
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7
     inputs:
       tag: latest
       licenses: GPL-3.0+
@@ -11,7 +11,7 @@ include:
         - linux/386
         - linux/arm64
         - linux/arm/v7
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7.0.3
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@7
     inputs:
       tag: luajit
       licenses: GPL-3.0+
