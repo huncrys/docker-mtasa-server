@@ -1,7 +1,7 @@
 ARG MTA_VERSION=1.6.0
-ARG MTA_REVISION=23104
+ARG MTA_REVISION=23234
 
-FROM --platform=$BUILDPLATFORM alpine:3.21 AS builder
+FROM --platform=$BUILDPLATFORM alpine:3.22 AS builder
 
 ARG MTA_VERSION
 ARG MTA_REVISION
@@ -65,10 +65,11 @@ ENV \
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        ca-certificates \
         bash \
+        ca-certificates \
         gosu \
         libncursesw6 \
+        libssl3 \
         locales \
         tzdata \
         unzip \
