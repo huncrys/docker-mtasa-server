@@ -1,7 +1,7 @@
 ARG MTA_VERSION=1.6.0
-ARG MTA_REVISION=23258
+ARG MTA_REVISION=23610
 
-FROM --platform=$BUILDPLATFORM alpine:3.22 AS builder
+FROM --platform=$BUILDPLATFORM alpine:3.22@sha256:4b7ce07002c69e8f3d704a9c5d6fd3053be500b7f1c69fc0d80990c2ad8dd412 AS builder
 
 ARG MTA_VERSION
 ARG MTA_REVISION
@@ -51,7 +51,7 @@ RUN apk add --no-cache --update \
     && rm -rf /tmp/* \
     ;
 
-FROM debian:bookworm-slim
+FROM debian:trixie-slim@sha256:18764e98673c3baf1a6f8d960b5b5a1ec69092049522abac4e24a7726425b016
 
 ENV \
     DEBIAN_FRONTEND="noninteractive" \
