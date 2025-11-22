@@ -10,12 +10,12 @@ variables:
     - linux/arm/v7
 
 include:
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@8
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@10
     inputs:
       <<: *defaults
       variant: official
       tags: [latest]
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@8
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@10
     inputs:
       <<: *defaults
       variant: luajit
