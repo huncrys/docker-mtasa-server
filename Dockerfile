@@ -69,7 +69,7 @@ RUN apt-get update \
         ca-certificates \
         gosu \
         libncursesw6 \
-        libssl3 \
+        libssl3t64 \
         locales \
         tzdata \
         unzip \
