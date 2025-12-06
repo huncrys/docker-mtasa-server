@@ -6,19 +6,16 @@ variables:
   platforms:
     - linux/amd64
     - linux/386
-    - linux/arm64
-    - linux/arm/v7
+#    - linux/arm64
+#    - linux/arm/v7
 
 include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@10
     inputs:
       <<: *defaults
-      variant: official
-      tags: [latest]
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@10
     inputs:
       <<: *defaults
       variant: luajit
-      tags: [luajit]
       args:
         - IS_LUAJIT=true
