@@ -53,7 +53,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache-$TARGET
     locale-gen en_US.UTF-8
     
     groupadd -g "$PGID" mta
-    useradd -u "$PUID" -g "$PGID" -d /app -s /bin/false mta
+    useradd -l -u "$PUID" -g "$PGID" -d /app -s /bin/false mta
     usermod -G users mta
 EOF
 

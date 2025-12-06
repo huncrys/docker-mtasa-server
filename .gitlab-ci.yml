@@ -10,6 +10,7 @@ variables:
 #    - linux/arm/v7
 
 include:
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@10
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@10
     inputs:
       <<: *defaults
