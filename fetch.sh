@@ -23,7 +23,7 @@ else
 fi
 
 TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-rc-${MTA_REVISION}.tar.gz"
-if [[ -n "$IS_LUAJIT" ]]; then
+if [[ -n "${IS_LUAJIT:-}" ]]; then
     package_version=$(glab api --hostname oaklab.hu 'projects/crys%2Fmtasa-blue/packages' --paginate | jq -r '[. |= sort_by(.version) | reverse | .[] | select(.version | contains(env.MTA_VERSION + "-r" + env.MTA_REVISION))][0].version')
     BASE_URL="https://oaklab.hu/api/v4/projects/crys%2Fmtasa-blue/packages/generic/mtasa-blue/${package_version}"
 else
