@@ -21,7 +21,7 @@ ARG TARGETVARIANT
 
 RUN --mount=type=bind,source=fetch.sh,target=/usr/local/bin/fetch.sh fetch.sh
 
-FROM debian:trixie-slim@sha256:4bcb9db66237237d03b55b969271728dd3d955eaaa254b9db8a3db94550b1885
+FROM debian:trixie-slim@sha256:ef03cc58454dd9b023970e063ff64ed0a9b1e66009bc9e6f940f20b3ea73f344
 
 ENV \
     DEBIAN_FRONTEND="noninteractive" \
