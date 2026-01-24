@@ -8,6 +8,7 @@ variables:
     - linux/386
     - linux/arm64
     - linux/arm/v7
+  registry-cache: true
 
 include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@11
