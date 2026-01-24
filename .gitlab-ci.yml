@@ -2,12 +2,12 @@ variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
 .defaults: &defaults
-  licenses: GPL-3.0+
+  licenses: GPL-3.0-or-later
   platforms:
     - linux/amd64
     - linux/386
-#    - linux/arm64
-#    - linux/arm/v7
+    - linux/arm64
+    - linux/arm/v7
 
 include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@11
