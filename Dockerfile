@@ -1,7 +1,7 @@
 ARG MTA_VERSION=1.6.0
 ARG MTA_REVISION=23757
 
-FROM --platform=$BUILDPLATFORM alpine:3.23@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11 AS builder
+FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:a2d49ea686c2adfe3c992e47dc3b5e7fa6e6b5055609400dc2acaeb241c829f4 AS builder
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add -uU \
@@ -21,7 +21,7 @@ ARG TARGETVARIANT
 
 RUN --mount=type=bind,source=fetch.sh,target=/usr/local/bin/fetch.sh fetch.sh
 
-FROM debian:trixie-slim@sha256:b6e2a152f22a40ff69d92cb397223c906017e1391a73c952b588e51af8883bf8
+FROM debian:trixie-slim@sha256:4e401d95de7083948053197a9c3913343cd06b706bf15eb6a0c3ccd26f436a0e
 
 ENV \
     DEBIAN_FRONTEND="noninteractive" \
