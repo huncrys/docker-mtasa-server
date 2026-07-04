@@ -5,7 +5,7 @@ FROM --platform=$BUILDPLATFORM alpine:3.24@sha256:28bd5fe8b56d1bd048e5babf5b1071
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add -uU \
-        glab \
+        curl \
         gzip \
         jq \
         tar \
