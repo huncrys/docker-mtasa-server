@@ -11,6 +11,7 @@ RUN --mount=type=cache,target=/var/cache/apk \
         tar \
         unzip \
         wget \
+        xz \
     ;
 
 ARG MTA_VERSION

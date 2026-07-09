@@ -20,12 +20,12 @@ else
     exit 1
 fi
 
-TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-rc-${MTA_REVISION}.tar.gz"
 if [[ -n "${IS_LUAJIT:-}" ]]; then
-    package_version=$(curl -fsS 'https://oaklab.hu/api/v4/projects/crys%2Fmtasa-blue/packages?per_page=100' | jq -r '[. |= sort_by(.version) | reverse | .[] | select(.version | contains(env.MTA_VERSION + "-r" + env.MTA_REVISION))][0].version')
-    BASE_URL="https://oaklab.hu/api/v4/projects/crys%2Fmtasa-blue/packages/generic/mtasa-blue/${package_version}"
+    TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-luajit-${MTA_REVISION}.tar.xz"
+    BASE_URL="https://nightly.mtasa.hu/luajit"
 else
-    BASE_URL="https://nightly.multitheftauto.com"
+    TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-rc-${MTA_REVISION}.tar.gz"
+    BASE_URL="https://nightly.mtasa.hu/official"
 fi
 
 wget -nv -P /tmp \
@@ -39,7 +39,7 @@ mkdir -p \
     /rootfs/usr/local/bin \
 ;
 
-tar -xzf "/tmp/${TARNAME}" -C /rootfs/app --strip-components 1
+tar -xaf "/tmp/${TARNAME}" -C /rootfs/app --strip-components 1
 mv /rootfs/app/mods/deathmatch /rootfs/defaults
 
 tar -xzf /tmp/baseconfig.tar.gz -C /rootfs/defaults --strip-components 1
