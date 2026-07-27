@@ -13,5 +13,6 @@ include:
         - linux/arm/v7
       registry-cache: true
       targets:
-        - default
+        # trailing "=" keeps the tag suffix empty, same as the "default" target would
+        - official=
         - luajit
