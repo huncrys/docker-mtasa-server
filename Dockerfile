@@ -84,7 +84,7 @@ EXPOSE  22003/udp \
 
 FROM runtime AS luajit
 
-COPY --from=fetch-luajit --chown=mta:mta /rootfs/ /
+COPY --from=fetch-luajit --chown=root:root /rootfs/ /
 
 # The official packages statically link libmysqlclient into dbconmy.so, which pulls in OpenSSL 1.1
 # dynamically. Trixie only ships OpenSSL 3, so without libssl1.1 from bullseye the MySQL driver
@@ -118,4 +118,4 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,id=apt-cache-$TARGET
     apt-get install -y --no-install-recommends libssl1.1
 EOF
 
-COPY --from=fetch-official --chown=mta:mta /rootfs/ /
+COPY --from=fetch-official --chown=root:root /rootfs/ /

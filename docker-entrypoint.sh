@@ -2,59 +2,25 @@
 
 set -e
 
-mkdir -p \
-    /config/resources \
-    /modules
+mkdir -p /config/resources
 
-echo "**** linking config ****"
-ln -vsfT /config /app/mods/deathmatch
+# /app/mods/deathmatch is a symlink to /config, so everything below lands in the
+# config volume. The i386 build additionally keeps its engine libraries and its
+# module directory there, which is what the symlink and .so cases cover.
+echo "**** checking defaults ****"
+for src in /defaults/*; do
+    dst="/config/${src#/defaults/}"
 
-(
-    echo "**** checking defaults ****"
-    cd /defaults
-    
-    for file in *; do
-        if [ "${file: -3}" == ".so" ]; then
-            ln -vsfT "/defaults/$file" "/config/$file"
-        elif [ ! -f "/config/$file" ]; then
-            cp -v "$file" "/config/$file"
+    if [[ -L "$src" ]]; then
+        if [[ ! -d "$dst" || -L "$dst" ]]; then
+            ln -vsfT "$(readlink "$src")" "$dst"
         fi
-    done
-)
-
-(
-    echo "**** detecting module directory ****"
-    arch=$(dpkg --print-architecture)
-    if [[ "$arch" == "amd64" ]]; then
-        SO_DIR="x64"
-    elif [[ "$arch" == "i386" ]]; then
-        SO_DIR="mods/deathmatch"
-    elif [[ "$arch" == "armhf" ]]; then
-        SO_DIR="arm"
-    elif [[ "$arch" == "arm64" ]]; then
-        SO_DIR="arm64"
-    else
-        echo "unsupported architecture: $arch"
-        exit 1
+    elif [[ "$src" == *.so ]]; then
+        ln -vsfT "$src" "$dst"
+    elif [[ ! -e "$dst" ]]; then
+        cp -v "$src" "$dst"
     fi
-
-    MODULE_DIR="/app/$SO_DIR/modules"
-    echo "module directory: $MODULE_DIR"
-    mkdir -p "$MODULE_DIR"
-
-    echo "**** checking modules ****"
-    
-    cd /modules
-    
-    if [[ -n "$(find . -maxdepth 0 -empty)" ]]; then
-        echo "no modules found"
-        exit 0
-    fi
-
-    for module in *.so; do
-        [[ -f "$MODULE_DIR/$module" ]] || ln -vsfT "/modules/$module" "${MODULE_DIR}/$module"
-    done
-)
+done
 
 if [[ -n "$(find /config/resources -maxdepth 0 -empty)" ]]; then
     echo "**** downloading resources ****"
@@ -72,12 +38,10 @@ echo -n "changing groupid of mta to $PGID... "
 groupmod -g "$PGID" mta
 echo "done"
 
+# /app is owned by root and never written to by the server, so only the config
+# volume needs to follow PUID/PGID.
 echo "**** changing permissions ****"
-(
-    set -x
-    chown -R mta:mta \
-        /app \
-        /config
-)
+chown -Rc mta:mta /config
+echo "done"
 
 exec gosu mta:mta "$@"
