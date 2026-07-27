@@ -1,23 +1,17 @@
 variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
-.defaults: &defaults
-  licenses: GPL-3.0-or-later
-  platforms:
-    - linux/amd64
-    - linux/386
-#    - linux/arm64
-#    - linux/arm/v7
-  registry-cache: true
-
 include:
   - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@11
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@11
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish-multi@11
     inputs:
-      <<: *defaults
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish@11
-    inputs:
-      <<: *defaults
-      variant: luajit
-      args:
-        - IS_LUAJIT=true
+      licenses: GPL-3.0-or-later
+      platforms:
+        - linux/amd64
+        - linux/386
+        - linux/arm64
+        - linux/arm/v7
+      registry-cache: true
+      targets:
+        - default
+        - luajit

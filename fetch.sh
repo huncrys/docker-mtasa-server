@@ -20,13 +20,16 @@ else
     exit 1
 fi
 
-if [[ -n "${IS_LUAJIT:-}" ]]; then
+if [[ "$MTA_VARIANT" == "luajit" ]]; then
     TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-luajit-${MTA_REVISION}.tar.xz"
-    BASE_URL="https://nightly.mtasa.hu/luajit"
-else
+elif [[ "$MTA_VARIANT" == "official" ]]; then
     TARNAME="multitheftauto_linux${TARSUFFIX}-${MTA_VERSION}-rc-${MTA_REVISION}.tar.gz"
-    BASE_URL="https://nightly.mtasa.hu/official"
+else
+    echo "Unsupported variant: ${MTA_VARIANT}" >&2
+    exit 1
 fi
+
+BASE_URL="https://nightly.mtasa.hu/${MTA_VARIANT}"
 
 wget -nv -P /tmp \
     "${BASE_URL}/${TARNAME}" \
