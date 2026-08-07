@@ -2,8 +2,8 @@ variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
 include:
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@11
-  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish-multi@11
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/hadolint@12
+  - component: $CI_SERVER_FQDN/oaklab/ci-templates/oci-publish-multi@12
     inputs:
       licenses: GPL-3.0-or-later
       platforms:
