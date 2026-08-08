@@ -1,3 +1,10 @@
+spec:
+  inputs:
+    no-cache:
+      type: boolean
+      default: false
+      description: Whether to disable the build cache when building the image.
+---
 variables:
   CI_DOCKERHUB_IMAGE: huncrys/mtasa-server
 
@@ -12,6 +19,7 @@ include:
         - linux/arm64
         - linux/arm/v7
       registry-cache: true
+      no-cache: $[[ inputs.no-cache ]]
       targets:
         # trailing "=" keeps the tag suffix empty, same as the "default" target would
         - official=
