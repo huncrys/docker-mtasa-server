@@ -89,24 +89,25 @@ COPY --from=fetch-luajit --chown=root:root /rootfs/ /
 # The official packages statically link libmysqlclient into dbconmy.so, which pulls in OpenSSL 1.1
 # dynamically. Trixie only ships OpenSSL 3, so without libssl1.1 from bullseye the MySQL driver
 # fails to load. The pin keeps every other package off the bullseye repository.
-# Note: bullseye LTS ends 2026-08-31, after which it stops receiving security updates.
+# Note: bullseye LTS ended 2026-08-31; bullseye-security has since dropped its packages, so this
+# comes from the plain bullseye suite and no longer receives security updates.
 FROM runtime AS official
 
-COPY <<'EOF' /etc/apt/sources.list.d/bullseye-security.sources
+COPY <<'EOF' /etc/apt/sources.list.d/bullseye.sources
 Types: deb
-URIs: http://security.debian.org/debian-security
-Suites: bullseye-security
+URIs: http://deb.debian.org/debian
+Suites: bullseye
 Components: main
-Signed-By: /usr/share/keyrings/debian-archive-bullseye-security-automatic.gpg
+Signed-By: /usr/share/keyrings/debian-archive-bullseye-automatic.gpg
 EOF
 
-COPY <<'EOF' /etc/apt/preferences.d/bullseye-security
+COPY <<'EOF' /etc/apt/preferences.d/bullseye
 Package: *
-Pin: release n=bullseye-security
+Pin: release n=bullseye
 Pin-Priority: -1
 
 Package: libssl1.1
-Pin: release n=bullseye-security
+Pin: release n=bullseye
 Pin-Priority: 500
 EOF
 
